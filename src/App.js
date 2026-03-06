@@ -12,6 +12,7 @@ function App() {
   const [currentGuess, setCurrentGuess] = useState('');
   const [gameOver, setGameOver] = useState(false);
   const [shakingRow, setShakingRow] = useState(-1);
+  const [isLightMode, setIsLightMode] = useState(false);
 
   useEffect(() => {
     const fetchWords = async () => {
@@ -26,6 +27,10 @@ function App() {
 
     fetchWords();
   }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isLightMode ? 'light' : 'dark');
+  }, [isLightMode]);
 
   const handleKeyDown = (event) => {
     if (gameOver) return;
@@ -92,6 +97,10 @@ function App() {
     }
   };
 
+  const toggleTheme = () => {
+    setIsLightMode(!isLightMode);
+  };
+
   return (
     <div className="App" tabIndex="0">
       <motion.h1
@@ -101,6 +110,9 @@ function App() {
       >
         Wordle Clone
       </motion.h1>
+      <button className="theme-toggle" onClick={toggleTheme}>
+        {isLightMode ? '🌙 Dark Mode' : '☀️ Light Mode'}
+      </button>
       <div className="game-board">
         <AnimatePresence>
           {guesses.map((guess, i) => (
@@ -145,13 +157,4 @@ function App() {
           className="game-over"
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          Game Over! The word was {solution}
-        </motion.div>
-      )}
-    </div>
-  );
-}
-
-export default App;
+          t
